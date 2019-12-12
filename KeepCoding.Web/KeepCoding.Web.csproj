@@ -14,14 +14,4 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\KeepCoding\KeepCoding.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Data\cameras-defb.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
