@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\KeepCoding\KeepCoding.Core.csproj" />
+    <ProjectReference Include="..\KeepCoding.Core\KeepCoding.Core.csproj" />
   </ItemGroup>
 
 </Project>

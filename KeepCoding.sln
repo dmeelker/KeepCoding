@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29409.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeepCoding.Core", "KeepCoding\KeepCoding.Core.csproj", "{641BD64E-5398-4E2D-81BF-C473E694BFAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeepCoding.Core", "KeepCoding.Core\KeepCoding.Core.csproj", "{641BD64E-5398-4E2D-81BF-C473E694BFAE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeepCoding.Core.Tests", "KeepCoding.Core.Tests\KeepCoding.Core.Tests.csproj", "{FF3D1C19-9036-454C-971B-D364AAA4F94C}"
 EndProject
