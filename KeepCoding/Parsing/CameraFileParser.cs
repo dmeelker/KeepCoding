@@ -9,6 +9,15 @@ namespace KeepCoding.Core.Parsing
 {
     public class CameraFileParser
     {
+        public async Task<Camera[]> ReadCamerasFromFile(string fileName)
+        {
+            using (var fileStream = File.OpenRead(fileName))
+            using (var streamReader = new StreamReader(fileStream))
+            {
+                return await ReadCameras(streamReader);
+            }
+        }
+
         public async Task<Camera[]> ReadCameras(TextReader reader)
         {
             await SkipColumnHeader(reader);
@@ -45,7 +54,7 @@ namespace KeepCoding.Core.Parsing
             if (parts.Length == 3)
             {
                 var name = parts[0];
-                var id = ParseCameraIdFromName(name);
+                var number = ParseCameraNumberFromName(name);
 
                 if (!ParseDouble(parts[1], out var latitude))
                     return null;
@@ -55,7 +64,7 @@ namespace KeepCoding.Core.Parsing
 
                 return new Camera
                 {
-                    Id = id,
+                    Number = number,
                     Name = name,
                     Latitude = latitude,
                     Longitude = longitude
@@ -63,11 +72,12 @@ namespace KeepCoding.Core.Parsing
             }
             else
             {
+                // Incorrectly formatted line, skip!
                 return null;
             }
         }
 
-        internal int ParseCameraIdFromName(string name)
+        internal int ParseCameraNumberFromName(string name)
         {
             var match = new Regex(@"^\w+-\w+-(\d+)", RegexOptions.Singleline).Match(name);
             if (match.Success)

@@ -9,7 +9,7 @@ namespace KeepCoding.API.Models
     public class Camera
     {
         [Required]
-        public int Id { get; set; }
+        public int Number { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

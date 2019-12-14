@@ -13,10 +13,22 @@ namespace KeepCoding.Cli
     {
         static async Task Main(string[] args)
         {
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Usage: KeepCoding.Cli <name query>");
+                return;
+            }
+
+            var query = args[0];
             var cameraStore = await InitializeCameraStore("data\\cameras-defb.csv");
             var searcher = new CameraSearcher(cameraStore);
 
-            var result = searcher.SearchCameras(new SearchRequest { Name = "Neude" });
+            SearchCamerasAndShowResults(query, searcher);
+        }
+
+        private static void SearchCamerasAndShowResults(string query, CameraSearcher searcher)
+        {
+            var result = searcher.SearchCameras(new SearchRequest { Name = query });
 
             foreach (var camera in result)
                 PrintCameraDetails(camera);
@@ -24,18 +36,13 @@ namespace KeepCoding.Cli
 
         private static void PrintCameraDetails(Camera camera)
         {
-            Console.WriteLine($"{camera.Id} | {camera.Name} | {camera.Latitude.ToString(CultureInfo.InvariantCulture)} | {camera.Longitude.ToString(CultureInfo.InvariantCulture)}");
+            Console.WriteLine($"{camera.Number} | {camera.Name} | {camera.Latitude.ToString(CultureInfo.InvariantCulture)} | {camera.Longitude.ToString(CultureInfo.InvariantCulture)}");
         }
 
         private static async Task<CameraStore> InitializeCameraStore(string fileName)
         {
             var cameraStore = new CameraStore();
-
-            using (var fileStream = File.OpenRead(fileName))
-            using (var streamReader = new StreamReader(fileStream))
-            {
-                cameraStore.Cameras = await new CameraFileParser().ReadCameras(streamReader);
-            }
+            cameraStore.Cameras = await new CameraFileParser().ReadCamerasFromFile(fileName);
 
             return cameraStore;
         }

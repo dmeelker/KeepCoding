@@ -1,4 +1,5 @@
 ﻿@page
+
 @model IndexModel
 @{
     ViewData["Title"] = "Security cameras Utrecht";
@@ -89,19 +90,59 @@
             height: 500px;
             width: 100%;
         }
+
+        .camera-row:hover {
+            font-weight: bold;
+        }
     </style>
 }
 
 @section Scripts
-{
+{   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2bVfivslX1qqd20wVg_Jin-nuXKjGB-0" async defer></script>
     <script type="text/javascript">
-        function LoadCameras() {
-            $.get("/api/cameras", (cameras) => {
-                console.log(cameras);
-            })
+        const cameras = @Html.Raw(Json.Serialize(Model.Cameras));
+        let markers = {};
+
+        function initializePage() {
+            initializeMap();
+            placeMarkers();
+            hookCameraRowMouseOvers();
         }
 
-        LoadCameras();
+        function initializeMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: 52.091497, lng: 5.116731},
+                zoom: 13
+            });
+        }
+
+        function placeMarkers() {
+            for(let camera of cameras) {
+                let position = new google.maps.LatLng(camera.latitude, camera.longitude);
+                markers[camera.number] = new google.maps.Marker({position: position, map: map, title: camera.name});
+            }
+        }
+
+        function hookCameraRowMouseOvers() {
+            let rows = document.querySelectorAll(".camera-row");
+            for (let row of rows) {
+                let cameraNumber = row.dataset.cameraNumber;
+                let marker = markers[cameraNumber];
+
+                row.onclick = () => {
+                    map.setCenter(marker.getPosition());
+                    map.setZoom(20);
+                };
+                row.onmouseover = () => {
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                };
+                row.onmouseout = () => {
+                    marker.setAnimation(null);
+                };
+            }
+        }
+
+        window.onload = initializePage;
     </script>
 }
 
@@ -113,77 +154,113 @@
 </div>
 <main>
     <table id="cameraTableContainer">
-        <tbody>
-            <tr>
-                <td>
-                    <table id="column3">
-                        <thead>
-                            <tr>
-                                <th colspan="4">Cameras 3</th>
-                            </tr>
-                            <tr>
-                                <th>Number</th>
-                                <th>Name</th>
-                                <th>Latitude</th>
-                                <th>Longitude</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </td>
-                <td>
-                    <table id="column5">
-                        <thead>
-                            <tr>
-                                <th colspan="4">Cameras 5</th>
-                            </tr>
-                            <tr>
-                                <th>Number</th>
-                                <th>Name</th>
-                                <th>Latitude</th>
-                                <th>Longitude</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </td>
-                <td>
-                    <table id="column15">
-                        <thead>
-                            <tr>
-                                <th colspan="4">Cameras 3 &amp; 5</th>
-                            </tr>
-                            <tr>
-                                <th>Number</th>
-                                <th>Name</th>
-                                <th>Latitude</th>
-                                <th>Longitude</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </td>
-                <td>
-                    <table id="columnOther">
-                        <thead>
-                            <tr>
-                                <th colspan="4">Cameras Overig</th>
-                            </tr>
-                            <tr>
-                                <th>Number</th>
-                                <th>Name</th>
-                                <th>Latitude</th>
-                                <th>Longitude</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-        </tbody>
+            <tbody>
+                <tr>
+                    <td>
+                        <table id="column3">
+                            <thead>
+                                <tr>
+                                    <th colspan="4">Cameras 3</th>
+                                </tr>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Name</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var camera in Model.CategorizedCameras[0])
+                                {
+                                <tr class="camera-row" data-camera-number="@camera.Number">
+                                    <td>@camera.Number</td>
+                                    <td>@camera.Name</td>
+                                    <td>@camera.Latitude</td>
+                                    <td>@camera.Longitude</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <table id="column5">
+                            <thead>
+                                <tr>
+                                    <th colspan="4">Cameras 5</th>
+                                </tr>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Name</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var camera in Model.CategorizedCameras[1])
+                                {
+                                <tr class="camera-row" data-camera-number="@camera.Number">
+                                    <td>@camera.Number</td>
+                                    <td>@camera.Name</td>
+                                    <td>@camera.Latitude</td>
+                                    <td>@camera.Longitude</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <table id="column15">
+                            <thead>
+                                <tr>
+                                    <th colspan="4">Cameras 3 &amp; 5</th>
+                                </tr>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Name</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var camera in Model.CategorizedCameras[2])
+                                {
+                                <tr class="camera-row" data-camera-number="@camera.Number">
+                                    <td>@camera.Number</td>
+                                    <td>@camera.Name</td>
+                                    <td>@camera.Latitude</td>
+                                    <td>@camera.Longitude</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <table id="columnOther">
+                            <thead>
+                                <tr>
+                                    <th colspan="4">Cameras Overig</th>
+                                </tr>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Name</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var camera in Model.CategorizedCameras[3])
+                                {
+                                <tr class="camera-row" data-camera-number="@camera.Number">
+                                    <td>@camera.Number</td>
+                                    <td>@camera.Name</td>
+                                    <td>@camera.Latitude</td>
+                                    <td>@camera.Longitude</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
     </table>
 </main>

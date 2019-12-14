@@ -1,8 +1,10 @@
+using KeepCoding.Web.ApiClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace KeepCoding.Web
 {
@@ -19,8 +21,11 @@ namespace KeepCoding.Web
         {
             services.AddRazorPages();
 
-            
-            
+            services.AddHttpClient();
+            services.AddHttpClient<IKeepCodingApiClient, KeepCodingApiClient>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:44308/");
+            });
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -37,9 +42,7 @@ namespace KeepCoding.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

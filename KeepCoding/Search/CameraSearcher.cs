@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace KeepCoding.Core.Search
 {
@@ -13,6 +11,8 @@ namespace KeepCoding.Core.Search
     public class SearchRequest
     {
         public string Name { get; set; }
+
+        public bool NameFilterSet => !string.IsNullOrEmpty(Name);
     }
 
     public class CameraSearcher
@@ -28,10 +28,15 @@ namespace KeepCoding.Core.Search
         {
             var query = dataSource.GetAllCameras().AsQueryable();
 
-            if (!string.IsNullOrEmpty(searchRequest.Name))
-                query = query.Where(camera => camera.Name.IndexOf(searchRequest.Name, StringComparison.OrdinalIgnoreCase) >= 0);
+            if (searchRequest.NameFilterSet)
+                query = FilterByName(query, searchRequest.Name);
 
             return query.ToArray();
+        }
+
+        private static IQueryable<Camera> FilterByName(IQueryable<Camera> query, string name)
+        {
+            return query.Where(camera => camera.Name.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0);
         }
     }
 }

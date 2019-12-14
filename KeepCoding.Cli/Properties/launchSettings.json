@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "KeepCoding.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "neude"
+    }
+  }
+}

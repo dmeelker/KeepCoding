@@ -33,7 +33,7 @@ namespace KeepCoding.Core.Tests.Parsing
 
             parsedCameras.Should().HaveCount(1);
             var camera = parsedCameras.First();
-            camera.Id.Should().Be(501);
+            camera.Number.Should().Be(501);
             camera.Name.Should().Be("UTR-CM-501 Neude rijbaan voor Postkantoor");
             camera.Latitude.Should().Be(52.093421);
             camera.Longitude.Should().Be(5.118278);
@@ -73,9 +73,9 @@ namespace KeepCoding.Core.Tests.Parsing
         [Theory]
         [InlineData("UTR-CM-530 Westplein / Van Sijpesteijnkade", 530)]
         [InlineData("UTR-CM-743-Boelesteinlaan - Queeckhovenplein", 743)]
-        public void ParseCameraIdFromName(string input, int expectedId)
+        public void ParseCameraNumberFromName(string input, int expectedId)
         {
-            var parsedId = new CameraFileParser().ParseCameraIdFromName(input);
+            var parsedId = new CameraFileParser().ParseCameraNumberFromName(input);
             parsedId.Should().Be(expectedId);
         }
 

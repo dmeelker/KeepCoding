@@ -27,7 +27,7 @@ namespace KeepCoding.API.Controllers
         public IEnumerable<Camera> Get()
         {
             return cameraStore.Cameras.Select(camera => new Camera {
-                Id = camera.Id,
+                Number = camera.Number,
                 Name = camera.Name,
                 Latitude = camera.Latitude,
                 Longitude = camera.Longitude

@@ -1,25 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+using KeepCoding.Web.ApiClient;
+using KeepCoding.Web.Business;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 
 namespace KeepCoding.Web.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly IKeepCodingApiClient apiClient;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public Camera[] Cameras { get; set; }
+        public Dictionary<int, Camera[]> CategorizedCameras { get; set; }
+
+        public IndexModel(IKeepCodingApiClient apiClient)
         {
-            _logger = logger;
+            this.apiClient = apiClient;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
+            Cameras = await LoadCameras();
+            CategorizedCameras = CategorizeCameras(Cameras);
+        }
 
+        private async Task<Camera[]> LoadCameras()
+        {
+            return (await apiClient.CameraAsync()).ToArray();
+        }
+
+        private Dictionary<int, Camera[]> CategorizeCameras(Camera[] cameras)
+        {
+            return cameras.GroupBy(camera => CameraCategorizer.Categorize(camera.Number))
+                .ToDictionary(group => group.Key, group => group.ToArray());
         }
     }
 }

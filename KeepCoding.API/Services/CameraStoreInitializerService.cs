@@ -36,13 +36,9 @@ namespace KeepCoding.API.Services
         private async Task<Camera[]> ReadCamerasFromFile(string fileName)
         {
             logger.LogInformation("Loading camera information from {file}", fileName);
-            using (var fileStream = File.OpenRead(fileName))
-            using (var streamReader = new StreamReader(fileStream))
-            {
-                var cameras = await new CameraFileParser().ReadCameras(streamReader);
-                logger.LogInformation("Loaded {cameraCount} cameras", cameras.Length);
-                return cameras;
-            }
+            var cameras = await new CameraFileParser().ReadCamerasFromFile(fileName);
+            logger.LogInformation("Loaded {cameraCount} cameras", cameras.Length);
+            return cameras;
         }
     }
 }
