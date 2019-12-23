@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>C:\Users\Dennis\source\repos\KeepCoding\KeepCoding.API\KeepCoding.API.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>C:\Users\Dennis\source\repos\KeepCoding\KeepCoding.API\KeepCoding.API.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
